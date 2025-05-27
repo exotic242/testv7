@@ -3,9 +3,7 @@ from flask import Blueprint, render_template, session, redirect, url_for
 
 student_bp = Blueprint("student", __name__, url_prefix="/student")
 
-@student_bp.route("/dashboard")
-from logs_api import expire_old_logs
-@student_bp.route("/dashboard")
+
 from sheets_api import get_all_records
 @student_bp.route("/dashboard")
 def dashboard():

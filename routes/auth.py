@@ -21,12 +21,9 @@ def register():
         is_admin = (admin_code == os.getenv("ADMIN_REGISTRATION_CODE"))
         
         append_row("users", [
-            name, surname, email, grade, password, "admin" if is_admin else "student"
-        ])
+    name, surname, email, grade, password, "admin" if is_admin else "student"
+])
 
-            "name": name, "surname": surname, "email": email,
-            "grade": grade, "password": password, "is_admin": is_admin
-        })
 
         flash("Registration successful. Please log in.")
         return redirect(url_for("auth.login"))
