@@ -1,0 +1,25 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+.env/
+*.env
+
+# Credentials (never commit this!)
+credentials.json
+
+# IDE/editor config
+.vscode/
+*.log
+
+# Mac/Linux system files
+.DS_Store
+*.swp
+
+# Render or deployment-specific
+*.zip
+runtime.txt
