@@ -1,0 +1,5 @@
+flask
+dotenv
+gspread
+oauth2client
+user-agents

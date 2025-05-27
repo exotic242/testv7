@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}My Logs{% endblock %}
+{% block content %}
+<h2>My Logs</h2>
+
+<table border="1" style="width: 100%; border-collapse: collapse;">
+  <tr>
+    {% for key in logs[0].keys() %}
+      <th>{{ key }}</th>
+    {% endfor %}
+  </tr>
+  {% for log in logs %}
+  <tr style="background-color:
+      {% if log.status == 'flagged' %}#f8d7da
+      {% elif log.status == 'verified' %}#d4edda
+      {% elif log.status == 'expired' %}#fff3cd
+      {% else %}white{% endif %}"
+      title="{{ log.status_reason }}">
+    {% for value in log.values() %}
+      <td>{{ value }}</td>
+    {% endfor %}
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}
