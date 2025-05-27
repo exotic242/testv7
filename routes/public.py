@@ -13,7 +13,7 @@ def leaderboard_view():
     users = get_all_records("users")
     sorted_users = sorted(users, key=lambda x: float(x.get("hours", 0)), reverse=True)
     leaderboard = []
-
+## work
     for u in sorted_users:
         leaderboard.append({
             "name": u.get("name", ""),
