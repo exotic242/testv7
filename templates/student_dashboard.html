@@ -1,50 +1,16 @@
 
-{% extends "base.html" %}{% block title %}Student Dashboard{% endblock %}{% block content %}
-{% if user %}
-  <form method="post" action="{{ url_for('student.set_goal') }}" class="mb-3">
-    <label>Set Goal (hours):</label>
-    <input type="number" name="goal" class="form-control mb-2" required>
-    <button class="btn btn-outline-info">Update Goal</button>
-  </form>
-
-  {% set current_hours = 0 %}
-  {% set goal_hours = 0 %}
-  {% for log in logs if log.student_id == user.email %}
-    {% if log.status == 'verified' %}
-      {% set current_hours = current_hours + (log.hours | float) %}
-    {% endif %}
+{% extends 'base.html' %}
+{% block content %}
+<div style='max-width:600px;margin:auto;'>
+<h2>Welcome, {{ name }}</h2>
+<p>Total Hours Logged: {{ total_hours }}</p>
+<h3>Badges Earned:</h3>
+<ul>
+  {% for badge in badges %}
+    <li>{{ badge }}</li>
+  {% else %}
+    <li>No badges earned yet.</li>
   {% endfor %}
-  {% set goal_hours = user.goal | float %}
-  {% if goal_hours > 0 %}
-    {% set percent = (current_hours / goal_hours) * 100 %}
-    <div class="progress mb-4" style="height: 25px;">
-      <div class="progress-bar bg-success" role="progressbar" style="width: {{ percent }}%;" aria-valuenow="{{ percent }}" aria-valuemin="0" aria-valuemax="100">
-        {{ percent | round(1) }}% of {{ goal_hours }}h
-      </div>
-    </div>
-  {% endif %}
-{% endif %}
-
-{% if alert_message %}
-<div class="alert alert-warning alert-dismissible fade show" role="alert">
-  {{ alert_message }}
-  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</ul>
 </div>
-{% endif %}
-
-<h2>Student Dashboard</h2>
-<form method="post" action="{{ url_for('student.start_log') }}" class="mb-3">
-  <div class="mb-2"><label>Activity:</label><input class="form-control" name="activity" required></div>
-  <input type="hidden" name="location" value="placeholder">
-  <button class="btn btn-warning">Start</button>
-</form>
-
-<form method="post" action="{{ url_for('student.stop_log') }}" class="mb-3">
-  <input type="hidden" name="location" value="placeholder">
-  <button class="btn btn-danger">Stop</button>
-</form>
-
-<a href="{{ url_for('student.my_logs') }}" class="btn btn-outline-secondary">View My Logs</a>
 {% endblock %}
-
-<br><a href="{{ url_for('student.calendar') }}" class="btn btn-outline-primary mt-3">View Calendar</a>

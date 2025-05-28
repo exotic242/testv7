@@ -1,5 +1,11 @@
+from routes.auth import login_required
+
 
 from flask import Blueprint, render_template, session, redirect, url_for
+from flask import send_file, session
+import csv
+import io
+import logs_api
 
 admin_bp = Blueprint("admin", __name__, url_prefix="/admin")
 
@@ -31,6 +37,7 @@ def view_logs():
     return render_template("admin_logs.html", logs=logs)
 
 @admin_bp.route("/logs/export")
+@login_required('admin')
 def export_logs():
     user = session.get("user")
     if not user or not user.get("is_admin"):
@@ -77,3 +84,41 @@ def analytics():
                            hours_by_student=hours_by_student,
                            activity_counts=activity_counts,
                            daily_counts=daily_counts)
+
+@admin.route('/export-logs')
+@login_required(role='admin')
+@login_required('admin')
+def export_logs():
+    if 'user_type' not in session or session['user_type'] != 'admin':
+        return "Access denied", 403
+
+    logs = logs_api.get_all_logs()
+    output = io.StringIO()
+    writer = csv.DictWriter(output, fieldnames=logs[0].keys())
+    writer.writeheader()
+    writer.writerows(logs)
+
+    output.seek(0)
+    return send_file(io.BytesIO(output.getvalue().encode()),
+                     mimetype='text/csv',
+                     as_attachment=True,
+                     download_name='all_logs.csv')
+
+@admin.route('/audit-log')
+@login_required(role='admin')
+@login_required('admin')
+def view_audit_log():
+    if 'user_type' not in session or session['user_type'] != 'admin':
+        return "Access denied", 403
+    logs = sh.worksheet("audit_log").get_all_records()
+    logs.sort(key=lambda x: x.get('timestamp', ''), reverse=True)
+    return render_template('admin_audit.html', logs=logs)
+
+@admin.route('/admin-dashboard')
+@login_required(role='admin')
+@login_required('admin')
+def admin_dashboard():
+    from logs_api import get_all_logs
+    logs = get_all_logs()
+    total_hours = sum(float(log.get('hours', 0)) for log in logs)
+    return render_template('admin_dashboard.html', total_hours=total_hours)

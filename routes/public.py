@@ -1,5 +1,7 @@
 
 from flask import Blueprint, render_template
+from flask import jsonify
+import logs_api
 from sheets_api import get_all_records
 
 public_bp = Blueprint("public", __name__)
@@ -25,3 +27,8 @@ def leaderboard_view():
     return render_template("leaderboard.html", leaderboard=leaderboard)
 
 
+
+@public.route('/leaderboard-data')
+def leaderboard_data():
+    leaderboard = logs_api.get_leaderboard()
+    return jsonify(leaderboard)

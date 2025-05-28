@@ -1,86 +1,54 @@
 
-# Community Service Tracker (Flask + Google Sheets)
+# Community Service Hours Tracker — Flask + Google Sheets App
 
-This is a Flask-based web application that allows students to log their community service hours and admins to manage and verify logs. It is designed to be deployed on [Render](https://render.com).
-
----
-
-## ✅ Features
-- Student registration, login, goal setting
-- Admin dashboard with CSV export
-- Smart logging with device/IP/location
-- Suspicious activity detection
-- Leaderboard and student log viewer
-- Dark mode analytics with Chart.js
-- Calendar view with FullCalendar.js
-- Goal progress bar and future award logic
-- Mobile-optimized, modular codebase
+## 🔧 Project Overview
+This web application allows students to log their community service hours, view badges, track their activity history, and check the leaderboard. Admins can export logs, view analytics, and audit actions. All data is synced in real-time with Google Sheets.
 
 ---
 
-## ⚙️ Deployment Instructions (Render)
-
-### 1. Upload the Project
-- Push to GitHub **OR**
-- Upload the ZIP and extract in your Render-connected repo
-
-### 2. Create a New Web Service
-- Go to [Render Dashboard](https://dashboard.render.com/)
-- Click **New + → Web Service**
-- Set the following:
-
-| Setting          | Value               |
-|------------------|---------------------|
-| Environment      | Python              |
-| Build Command    | *(Leave blank)*     |
-| Start Command    | `gunicorn app:app`  |
-| Runtime          | Python 3.11+        |
+## 👤 User Features
+- **Register/Login**: Students register with email and grade, login with hashed credentials.
+- **Edit Profile**: Change name or email; session and sheet are updated.
+- **Smart Logging**: Start/stop a session; logs activity with location, device, and IP.
+- **View Logs**: Access full activity history.
+- **Badges**: Automatically awarded at 10, 25, 50, 100 hours.
+- **Leaderboard**: Displays ranked student hours, live-refreshed.
+- **Password Reset**: Request reset link by email and securely set a new password.
 
 ---
 
-### 3. Add Environment Variables
-
-Go to **Environment > Add Environment Variable**, and add the following:
-
-```env
-SECRET_KEY=devkey
-ADMIN_REGISTRATION_CODE=letmein
-GOOGLE_SHEET_ID=your-google-sheet-id
-GOOGLE_CREDS_JSON=credentials.json
-```
+## 🔐 Admin Features
+- **Dashboard**: See total hours and student log summary.
+- **Export Logs**: Generate CSV from log data.
+- **Audit Log**: Tracks admin actions.
+- **Role Protection**: All admin/student routes are secured with decorators.
 
 ---
 
-### 4. Upload Your Credentials JSON
-
-- Go to **Environment > Secret Files**
-- Upload your `credentials.json` file there
-- Render will inject this securely at runtime
-
----
-
-### 5. Visit Your App
-
-Once deployed, Render will provide a live URL where your app is running!
+## 🌐 Tech Stack
+- **Flask** (with Blueprints)
+- **Google Sheets API (gspread)**
+- **Bootstrap CSS**
+- **Flask-Mail** (for reset emails)
+- **Werkzeug** (for password hashing)
 
 ---
 
-## 🗂 Folder Structure
-
-```
-.
-├── app.py
-├── .env
-├── requirements.txt
-├── sheets_api.py
-├── logs_api.py
-├── utils.py
-├── routes/
-├── templates/
-```
+## 📁 Project Structure
+- `/routes/` – Route logic for auth, student, admin, and public
+- `/templates/` – HTML templates with Jinja2
+- `sheets_api.py` – Google Sheets integration
+- `logs_api.py` – Smart log handling
+- `utils.py` – Session protection, tokens, helper logic
 
 ---
 
-## License
+## 📌 Setup Notes
+- Fill in `.env` with your Google Sheet ID and mail config
+- Install dependencies with `pip install -r requirements.txt`
+- Start the server: `python app.py`
 
-MIT — feel free to modify and extend.
+---
+
+## ✅ Final Status
+All core features are complete and fully functional.

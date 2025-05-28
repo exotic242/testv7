@@ -55,3 +55,36 @@ def update_user_goal(email, goal):
             ws.update_cell(row_index, goal_col, goal)
             return True
     return False
+
+def update_student_password(email, new_password_hash):
+    worksheet = sh.worksheet("students")
+    students = worksheet.get_all_records()
+    for i, student in enumerate(students, start=2):  # start=2 to skip header
+        if student['email'] == email:
+            worksheet.update_cell(i, student.keys().index('password') + 1, new_password_hash)
+            return True
+    return False
+
+def log_admin_action(admin_email, action_type, description):
+    worksheet = sh.worksheet("audit_log")
+    from datetime import datetime
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    worksheet.append_row([now, admin_email, action_type, description])
+
+
+def get_student_badges(email):
+    logs = get_all_records("logs")
+    user_logs = [log for log in logs if log.get("email") == email]
+    total_hours = sum(float(log.get("hours", 0)) for log in user_logs)
+
+    badges = []
+    if total_hours >= 10:
+        badges.append("10 Hour Badge")
+    if total_hours >= 25:
+        badges.append("25 Hour Star")
+    if total_hours >= 50:
+        badges.append("50 Hour Champion")
+    if total_hours >= 100:
+        badges.append("Century Hero")
+
+    return badges

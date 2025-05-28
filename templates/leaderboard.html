@@ -1,9 +1,21 @@
-{% extends "base.html" %}{% block title %}Leaderboard{% endblock %}{% block content %}
+
+{% extends 'base.html' %}
+{% block content %}
 <h2>Leaderboard</h2>
-<table>
-  <tr><th>Name</th><th>Grade</th><th>Hours</th></tr>
-  {% for user in leaderboard %}
-  <tr><td>{{ user.name }} {{ user.surname }}</td><td>{{ user.grade }}</td><td>{{ user.hours }}</td></tr>
-  {% endfor %}
-</table>
+<ul id="leaderboard">
+  <li>Loading...</li>
+</ul>
+<script>
+  fetch('/leaderboard-data')
+    .then(response => response.json())
+    .then(data => {
+      const container = document.getElementById('leaderboard');
+      container.innerHTML = '';
+      data.forEach(entry => {
+        const li = document.createElement('li');
+        li.textContent = entry.name + ": " + entry.total_hours + " hours";
+        container.appendChild(li);
+      });
+    });
+</script>
 {% endblock %}
